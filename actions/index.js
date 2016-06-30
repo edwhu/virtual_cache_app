@@ -2,10 +2,10 @@ import fetch from 'isomorphic-fetch';
 
 const API_URL = 'http://localhost:3000/db';
 
-export const setSelected = (selectedDevice) => {
+export const setSelected = (name) => {
 	return {
 		type:'SET_SELECTED',
-		selectedDevice
+		selectedDevice:name
 	};
 };
 
@@ -28,7 +28,6 @@ export const fetchDevices = () => {
 		return fetch(API_URL, {method:'GET'})
 			.then(res => res.json())
 			.then(json => {
-				console.log('fetched', json);
 				dispatch(receiveDevices(json[0]));
 			});
 	};

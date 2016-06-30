@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux'
+import { combineReducers } from 'redux';
 
 function devices(state = [], action) {
 	switch (action.type) {

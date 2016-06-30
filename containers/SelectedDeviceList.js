@@ -10,17 +10,17 @@ const setSelectedDevices = (devices, selected) => {
 	});
 };
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
 	//console.log('state', state.devices);
 	return {
 		devices:setSelectedDevices(state.devices, state.selectedDevice)
 	};
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
 	return {
 		onDeviceClick: name => {
-			console.log('clicked');
+			console.log('clicked', name);
 			dispatch(setSelected(name));
 		}
 	};

@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 const Device = ({onClick, selected, name}) => (
 	<li
 		onClick={onClick}
-		style={{backgroundColor: selected ? 'blue' : 'transparent'}}
+		style={{textDecoration: selected ? 'underline' : 'none'}}
 	>
 		{name}
 	</li>
