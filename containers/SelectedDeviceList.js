@@ -20,7 +20,6 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		onDeviceClick: name => {
-			console.log('clicked', name);
 			dispatch(setSelected(name));
 		}
 	};
