@@ -1,11 +1,14 @@
 import React, { PropTypes } from 'react';
+import {DeviceStyle} from '../styles/DeviceStyle'
 const Device = ({onClick, selected, name}) => (
-	<li
-		onClick={onClick}
-		style={{textDecoration: selected ? 'underline' : 'none'}}
-	>
-		{name}
-	</li>
+	<div style={{DeviceStyle}}>
+		<li
+			onClick={onClick}
+			style={{textDecoration: selected ? 'underline' : 'none'}}
+			>
+			{name}
+		</li>
+	</div>
 );
 
 Device.propTypes = {
