@@ -4,7 +4,7 @@ import DeviceList from '../components/DeviceList.js';
 
 const setSelectedDevices = (devices, selected) => {
 	return devices.map(device => {
-		if(device.name == selected)
+		if(device._id == selected)
 			return Object.assign({},device,{selected:true});
 		return Object.assign({}, device, {selected:false});
 	});
