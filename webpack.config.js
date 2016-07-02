@@ -1,7 +1,32 @@
 var path = require('path');
 var webpack = require('webpack');
 
-module.exports = {
+const production = {
+  devtool: 'cheap-module-eval-source-map',
+  entry:'./index',
+  output:{
+    path:path.join(__dirname, '/dist/'),
+    filename:'bundle.js',
+    publicPath:'/dist/'
+  },
+  plugins:[
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': JSON.stringify('production')
+      }
+    })
+  ],
+  module: {
+    loaders: [{
+      test: /\.js$/,
+      loaders: ['babel'],
+      include: path.join(__dirname, '')
+    }]
+  }
+}
+
+const dev = {
   devtool: 'cheap-module-eval-source-map',
   entry: [
     'webpack-hot-middleware/client',
@@ -10,7 +35,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/dist/'
   },
   plugins: [
     new webpack.optimize.OccurrenceOrderPlugin(),
@@ -27,3 +52,6 @@ module.exports = {
     ]
   }
 };
+
+const isDeveloping = process.env.NODE_ENV !== 'production';
+module.exports = isDeveloping ? dev : production;
