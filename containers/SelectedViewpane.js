@@ -4,7 +4,7 @@ const findSelectedDevice = state => {
 	const result = state.devices.filter( d => d._id == state.selectedDevice);
 	if(result.length === 1)
 		return result[0];
-	return {name:'Click a device on the left', loc:['none'], d2d:0, date:0, cache:[]};
+	return {name:'Click a device on the right', loc:['none'], d2d:0, date:0, cache:[]};
 };
 
 const mapStateToProps = state => {

@@ -2,7 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 
 const production = {
-  devtool: 'cheap-module-eval-source-map',
+  devtool: 'source-map',
   entry:'./index',
   output:{
     path:path.join(__dirname, '/dist/'),
@@ -14,6 +14,11 @@ const production = {
     new webpack.DefinePlugin({
       'process.env': {
         'NODE_ENV': JSON.stringify('production')
+      }
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
       }
     })
   ],

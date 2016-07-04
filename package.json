@@ -8,7 +8,7 @@
     "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register --require ./test/setup.js",
     "lint": "eslint actions components containers reducers styles",
     "startdev": "node vcserver.js",
-    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack -d -p"
+    "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js"
   },
   "author": "ed",
   "license": "ISC",
