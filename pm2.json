@@ -1,6 +1,6 @@
 {
   "apps" : [{
-    "script"      : "node vcserver.js",
+    "script"      : "vcserver.js",
     "watch"       : false,
     "env": {
       "NODE_ENV": "development",
