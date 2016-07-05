@@ -28,6 +28,7 @@ const Viewpane = ({selectedDevice}) => {
 				<tbody>
 					<tr>
 						<th>Video</th>
+						<th>Duration</th>
 						<th>Length</th>
 					</tr>
 					{cacheArray}
