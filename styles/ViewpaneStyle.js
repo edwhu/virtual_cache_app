@@ -6,15 +6,21 @@ const ViewpaneStyle = {
 };
 
 const TableStyle = {
+	overflowY:'scroll',
 	float:'left',
 	tableLayout:'fixed',
-	width:'50%'
+	width:'50%',
+	height:'20%',
+	borderCollapse:'collapse'
 };
 
 const TableDataStyle = {
-	textAlign:'center',
+	padding:8,
+	borderBottom:'1px solid #ddd',
+	textAlign:'left',
 	overflow:'hidden',
-	width:90
+	width:90,
+	height:40
 };
 
 export {ViewpaneStyle, TableStyle, TableDataStyle};
