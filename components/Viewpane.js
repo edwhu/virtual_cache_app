@@ -3,6 +3,7 @@ import VideoTable from './VideoTable'
 import {ViewpaneStyle, TableStyle, TableDataStyle} from '../styles/ViewpaneStyle.js'
 const Viewpane = ({selectedDevice}) => {
 	let cacheArray = selectedDevice.cache.map(video => {
+		//console.log('video',video._id);
 		return <VideoTable key={video._id} style={TableDataStyle} video={video} />
 	});
 
@@ -11,10 +12,10 @@ const Viewpane = ({selectedDevice}) => {
 			<table style={TableStyle}>
 				<tbody>
 					<tr>
-						<th>Name</th>
-						<th>location</th>
-						<th>d2d</th>
-						<th>date</th>
+						<th style={TableDataStyle}>Name</th>
+						<th style={TableDataStyle}>location</th>
+						<th style={TableDataStyle}>d2d</th>
+						<th style={TableDataStyle}>date</th>
 					</tr>
 					<tr>
 						<td style={TableDataStyle}>{selectedDevice.name}</td>
@@ -27,9 +28,9 @@ const Viewpane = ({selectedDevice}) => {
 			<table style={TableStyle}>
 				<tbody>
 					<tr>
-						<th>Video</th>
-						<th>Duration</th>
-						<th>Length</th>
+						<th style={TableDataStyle}>Video</th>
+						<th style={TableDataStyle}>Duration</th>
+						<th style={TableDataStyle}>Length</th>
 					</tr>
 					{cacheArray}
 				</tbody>
