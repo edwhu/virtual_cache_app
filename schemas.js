@@ -8,7 +8,7 @@ const deviceSchema = mongoose.Schema({
 	cache:[{name:String,id:String, length:String, duration:String,
 		battery:String, dataQuality:String, wifiQuality:String}],
 	d2d:0,
-	time:Number,
+	time:String,
 	loc: {
 		type: [Number],	// [<longitude>, <latitude>]
 		index: '2d'			// create the geospatial index
