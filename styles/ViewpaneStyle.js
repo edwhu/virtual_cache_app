@@ -1,8 +1,8 @@
 const ViewpaneStyle = {
+	paddingTop:'2%',
 	position:'absolute',
 	top:'80%',
-	width:'80%',
-	padding:'2%'
+	width:'80%'
 };
 
 const TableStyle = {
@@ -15,12 +15,10 @@ const TableStyle = {
 };
 
 const TableDataStyle = {
-	padding:8,
 	borderBottom:'1px solid #ddd',
 	textAlign:'left',
 	overflow:'hidden',
-	width:90,
-	height:40
+	width:90
 };
 
 export {ViewpaneStyle, TableStyle, TableDataStyle};
