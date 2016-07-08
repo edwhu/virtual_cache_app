@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch';
 
 // const API_URL = 'http://www.edward-hu.com/db';
-const API_URL = 'http://localhost:3000/db';
+const API_URL = require('../env.js').API_URL;
 
 export const setSelected = (name) => {
 	return {
