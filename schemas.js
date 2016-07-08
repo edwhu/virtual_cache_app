@@ -5,7 +5,8 @@ const locationSchema = mongoose.Schema({
 });
 const deviceSchema = mongoose.Schema({
 	name: String,
-	cache:[{name:String, length:String, duration:String}],
+	cache:[{name:String,id:String, length:String, duration:String,
+		battery:String, dataQuality:String, wifiQuality:String}],
 	d2d:0,
 	time:Number,
 	loc: {
