@@ -6,8 +6,8 @@ function generateJSON(){
 	let temp = {};
 	temp.name = Chance.first();
 	temp.cache = [];
-	for(let i = 0; i < Chance.integer({min:1, max:5}); ++i){
-		temp.cache.push({name:Chance.first(), size:Chance.integer({min:1, max:20})});
+	for(let i = 0; i < Chance.integer({min:1, max:30}); ++i){
+		temp.cache.push({name:Chance.first(), length:Chance.integer({min:1, max:20}), duration:Chance.integer({min:1, max:20})});
 	}
 	temp.d2d = 0;
 	temp.date = Chance.hammertime();
