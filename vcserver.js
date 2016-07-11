@@ -159,7 +159,7 @@ app.get('/test', (req, res) => {
 //get data
 app.get('/cxn', (req, res) => {
 	let string = '';
-	connections.forEach((k,v)=>{
+	connections.forEach((v,k)=>{
 		let json = {key:k, value:v};
 		string+=`${JSON.stringify(json,null, '\t')}`;
 	});
