@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
+const fs = require('fs');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
 const GeoJSON = require('mongoose-geojson-schema');
@@ -14,6 +15,9 @@ const Schemas = require('./schemas.js');
 const isDeveloping = process.env.NODE_ENV !== 'production';
 //const MONGO_URL = 'mongodb://localhost:27017/virtualcache';
 const MONGO_URL = require('./env.js').MONGO_URL;
+const VIDEO = './sunset.mp4';
+const FILESIZE = fs.statSync(VIDEO).size;
+
 //SETUP CODE
 app.use('/', express.static(path.join(__dirname, '')));
 //app.set('view engine', 'pug');
@@ -136,4 +140,28 @@ app.get('/erase', (req,res) => {
 	db.collection('versions').drop();
 	db.collection('devices').drop();
 	res.status(200).redirect('/');
+});
+
+//download video file
+let connections = new Map();
+app.get('/test', (req, res) => {
+	let currentDevice = req.headers['user-agent'];
+	let time = Date.now();
+	res.download(`./${VIDEO}`, VIDEO, err => {
+		time = Date.now() - time;
+		time/=1000;
+		let ratio = (FILESIZE/1000000) / time;
+		let now = new Date();
+		connections.set(currentDevice, {date:`${now.getMonth()}:${now.getDate()}:${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`, filesize:FILESIZE,time:time,ratio:ratio});
+	});
+});
+
+//get data
+app.get('/cxn', (req, res) => {
+	let string = '';
+	connections.forEach((k,v)=>{
+		let json = {key:k, value:v};
+		string+=`${JSON.stringify(json,null, '\t')}`;
+	});
+	res.send(string);
 });
