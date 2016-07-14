@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const GeoJSON = require('mongoose-geojson-schema');
 const locationSchema = mongoose.Schema({
 	type:'Point',
 	coordinates:[Number]

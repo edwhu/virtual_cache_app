@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { setSelected } from '../actions';
+import { setSelected, fetchNearbyDevices } from '../actions';
 import DeviceList from '../components/DeviceList.js';
 
 const setSelectedDevices = (devices, selected) => {
@@ -19,8 +19,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
 	return {
-		onDeviceClick: name => {
+		onDeviceClick: (name, location) => {
 			dispatch(setSelected(name));
+			dispatch(fetchNearbyDevices(location))
 		}
 	};
 };

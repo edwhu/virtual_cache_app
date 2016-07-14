@@ -4,7 +4,7 @@ import {ViewpaneStyle, TableStyle, TableDataStyle} from '../styles/ViewpaneStyle
 const Viewpane = ({selectedDevice}) => {
 	let cacheArray = selectedDevice.cache.map(video => {
 		//console.log('video',video._id);
-		return <VideoTable key={video._id} style={TableDataStyle} video={video} />
+		return <VideoTable key={video._id} style={TableDataStyle} video={video}  />
 	});
 
 	return (

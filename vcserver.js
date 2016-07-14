@@ -5,13 +5,11 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
 const MongoClient = require('mongodb').MongoClient;
-const GeoJSON = require('mongoose-geojson-schema');
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
 mongoose.Promise = Promise;// Use bluebird
 const version = require('mongoose-version');
 const Schemas = require('./schemas.js');
-
 const isDeveloping = process.env.NODE_ENV !== 'production';
 //const MONGO_URL = 'mongodb://localhost:27017/virtualcache';
 const MONGO_URL = require('./env.js').MONGO_URL;

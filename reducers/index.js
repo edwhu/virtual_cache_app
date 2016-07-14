@@ -6,8 +6,8 @@ function devices(state = [], action) {
 			return action.devices;
 		default:
 			return state;
-	}
-}
+	};
+};
 
 function selectedDevice(state = '', action) {
 	switch (action.type) {
@@ -15,12 +15,21 @@ function selectedDevice(state = '', action) {
 			return action.selectedDevice;
 		default:
 			return state;
-	}
+	};
 };
 
+function nearbyDevices(state = [], action) {
+	switch(action.type) {
+		case 'RECEIVE_NEARBY_DEVICES':
+			return action.nearbyDevices;
+		default:
+			return state;
+	};
+};
 const reducer = combineReducers({
 	devices,
-	selectedDevice
+	selectedDevice,
+	nearbyDevices
 });
 
 export default reducer;
