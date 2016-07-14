@@ -9,12 +9,13 @@
     "lint": "eslint actions components containers reducers styles",
     "startdev": "node vcserver.js",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js",
-    "pm2":"pm2 start pm2.json -i max --env production",
-    "deploy":"npm run build && npm run pm2"
+    "pm2": "pm2 start pm2.json -i max --env production",
+    "deploy": "npm run build && npm run pm2"
   },
   "author": "ed",
   "license": "ISC",
   "dependencies": {
+    "babel-plugin-lodash": "^3.2.2",
     "bluebird": "^3.4.1",
     "body-parser": "^1.15.2",
     "express": "^4.13.3",
@@ -48,6 +49,7 @@
     "cross-env": "^1.0.7",
     "expect": "^1.8.0",
     "jsdom": "^5.6.1",
+    "lodash": "^4.13.1",
     "mocha": "^2.2.5",
     "node-libs-browser": "^0.5.2",
     "webpack": "^1.9.11",
