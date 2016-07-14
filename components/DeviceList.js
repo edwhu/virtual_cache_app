@@ -4,13 +4,14 @@ import {DeviceListStyle} from '../styles/DeviceListStyle.js'
 const DeviceList = ({ devices, onDeviceClick}) => {
 	return (
 		<div style={DeviceListStyle}>
+			<h>All Devices</h>
 			<ul>
 				{devices.map(device =>
 					<Device
 						key={device._id}
 						name={device.name}
 						selected={device.selected}
-						onClick={() => onDeviceClick(device._id)}
+						onClick={() => onDeviceClick(device._id, device.loc)}
 						/>
 				)}
 			</ul>
