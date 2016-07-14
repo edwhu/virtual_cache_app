@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { setSelected } from '../actions';
+import { setSelected, fetchNearbyDevices } from '../actions';
 import GMap from '../components/GMap.js';
 
 const convertDevicesToMarkers = devices => {
@@ -18,7 +18,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
 	return {
 		onMarkerClick: (hoverKey, childProps) => {
+			//console.log('CHILDPROPS', childProps);
 			dispatch(setSelected(childProps.name));
+			dispatch(fetchNearbyDevices([childProps.lng, childProps.lat]));
 		}
 	};
 };
