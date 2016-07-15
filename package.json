@@ -32,7 +32,9 @@
     "react-redux": "^4.1.2",
     "redux": "^3.1.2",
     "redux-logger": "^2.6.1",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "through": "^2.3.8",
+    "youtube-dl": "^1.11.1"
   },
   "devDependencies": {
     "babel-core": "^6.3.15",
