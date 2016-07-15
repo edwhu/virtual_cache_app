@@ -178,6 +178,8 @@ app.get('/stream', (req, res) => {
 		console.log('Download started');
 		console.log('filename: ' + info._filename);
 		console.log('size: ' + info.size);
+		res.setHeader('Content-Length', info.size);
+		res.setHeader('Content-Type', 'video/mp4');
 	});
 	video.pipe(fs.createWriteStream('myvideo.mp4'));
 	video.pipe(res);
