@@ -14,7 +14,7 @@ const Schemas = require('./schemas.js');
 const isDeveloping = process.env.NODE_ENV !== 'production';
 //const MONGO_URL = 'mongodb://localhost:27017/virtualcache';
 const MONGO_URL = require('./env.js').MONGO_URL;
-const VIDEO = './sunset.mp4';
+const VIDEO = './seaside.mp4';
 const FILESIZE = fs.statSync(VIDEO).size;
 
 //SETUP CODE
