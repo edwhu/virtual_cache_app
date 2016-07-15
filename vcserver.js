@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
+const youtubedl = require('youtube-dl');
 const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
@@ -26,17 +27,17 @@ app.use(bodyParser.json());
 if(isDeveloping){
 	console.log('Development mode');
 	app.use(function (req, res, next) {
-	// Website you wish to allow to connect
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
-	// Request methods you wish to allow
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-	// Request headers you wish to allow
-	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-	// Set to true if you need the website to include cookies in the requests sent
-	// to the API (e.g. in case you use sessions)
-	res.setHeader('Access-Control-Allow-Credentials', true);
-	// Pass to next layer of middleware
-	next();
+		// Website you wish to allow to connect
+		res.setHeader('Access-Control-Allow-Origin', 'http://localhost:8080');
+		// Request methods you wish to allow
+		res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+		// Request headers you wish to allow
+		res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+		// Set to true if you need the website to include cookies in the requests sent
+		// to the API (e.g. in case you use sessions)
+		res.setHeader('Access-Control-Allow-Credentials', true);
+		// Pass to next layer of middleware
+		next();
 	});
 }
 //DB setup
@@ -85,12 +86,12 @@ app.get('/db', function (req, res) {
 	const currentDB_P = Device.find().exec()
 
 	const history_P = virtual_cache
-		.collection('versions')
-		.find()
-		.toArray()
+	.collection('versions')
+	.find()
+	.toArray()
 
 	Promise.all([currentDB_P, history_P])
-		.then(arr => res.status(201).send(arr));
+	.then(arr => res.status(201).send(arr));
 });
 
 //Json version of logs
@@ -162,4 +163,23 @@ app.get('/cxn', (req, res) => {
 		string+=`${JSON.stringify(json,null, '\t')}`;
 	});
 	res.send(string);
+});
+
+
+app.get('/stream', (req, res) => {
+	//stream youtube video
+	const video = youtubedl('https://www.youtube.com/watch?v=YQHsXMglC9A',
+	// Optional arguments passed to youtube-dl.
+	['--format=18'],
+	// Additional options can be given for calling `child_process.execFile()`.
+	{ cwd: __dirname });
+	// Will be called when the download starts.
+	video.on('info', function(info) {
+		console.log('Download started');
+		console.log('filename: ' + info._filename);
+		console.log('size: ' + info.size);
+	});
+	video.pipe(fs.createWriteStream('myvideo.mp4'));
+	video.pipe(res);
+	video.on('end', () => {res.end()});
 });
