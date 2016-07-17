@@ -183,5 +183,8 @@ app.get('/stream', (req, res) => {
 	});
 	video.pipe(fs.createWriteStream('myvideo.mp4'));
 	video.pipe(res);
-	video.on('end', () => {res.end()});
+	video.on('end', () => {
+		console.log('video ended');
+		res.end()
+	});
 });
