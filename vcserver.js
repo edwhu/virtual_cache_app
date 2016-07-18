@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
 const youtubedl = require('youtube-dl');
+const exportToCSV = require('./exportCSV.js')
 const MongoClient = require('mongodb').MongoClient;
 const mongoose = require('mongoose');
 const Promise = require('bluebird');
@@ -14,7 +15,7 @@ const Schemas = require('./schemas.js');
 const isDeveloping = process.env.NODE_ENV !== 'production';
 //const MONGO_URL = 'mongodb://localhost:27017/virtualcache';
 const MONGO_URL = require('./env.js').MONGO_URL;
-const VIDEO = './seaside.mp4';
+const VIDEO = './sunset.mp4';
 const FILESIZE = fs.statSync(VIDEO).size;
 
 //SETUP CODE
@@ -165,7 +166,7 @@ app.get('/cxn', (req, res) => {
 	res.send(string);
 });
 
-
+//stream
 app.get('/stream', (req, res) => {
 	//stream youtube video
 	const video = youtubedl('https://www.youtube.com/watch?v=YQHsXMglC9A',
@@ -178,13 +179,25 @@ app.get('/stream', (req, res) => {
 		console.log('Download started');
 		console.log('filename: ' + info._filename);
 		console.log('size: ' + info.size);
-		res.setHeader('Content-Length', info.size);
-		res.setHeader('Content-Type', 'video/mp4');
+	});
+	res.writeHead(200, {
+		"Content-Length": "unknown",
+		"Content-Type": "video/mp4"
 	});
 	video.pipe(fs.createWriteStream('myvideo.mp4'));
 	video.pipe(res);
-	video.on('end', () => {
-		console.log('video ended');
-		res.end()
+});
+
+//csv
+app.get('/csv', (req, res) => {
+	const currentDB_P = Device.find().exec()
+	currentDB_P
+	.then( arr => exportToCSV(arr, 'file.csv'))
+	.then( stream => {
+		res.writeHead(200, {
+			 "Content-Disposition": "attachment;filename=" + 'file.csv',
+			'Content-Type':'text/csv'
+		});
+		stream.pipe(res);
 	});
 });
