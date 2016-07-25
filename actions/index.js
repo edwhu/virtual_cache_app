@@ -47,7 +47,7 @@ export const receiveNearbyDevices = nearbyDevices => {
 	};
 };
 
-export const fetchNearbyDevices = (center, radius = 80000) => {
+export const fetchNearbyDevices = (center, radius = 100) => {
 	return function(dispatch) {
 		dispatch(requestNearbyDevices());
 		return fetch(API_URL + '/locsearch',
