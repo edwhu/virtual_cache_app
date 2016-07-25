@@ -5,13 +5,13 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const app = express();
 const youtubedl = require('youtube-dl');
-const exportToCSV = require('./exportCSV.js')
+//const exportToCSV = require('./exportCSV.js')
 const MongoClient = require('mongodb').MongoClient;
-const mongoose = require('mongoose');
+//const mongoose = require('mongoose');
 const Promise = require('bluebird');
-mongoose.Promise = Promise;// Use bluebird
-const version = require('mongoose-version');
-const Schemas = require('./schemas.js');
+//mongoose.Promise = Promise;// Use bluebird
+//const version = require('mongoose-version');
+//const Schemas = require('./schemas.js');
 const isDeveloping = process.env.NODE_ENV !== 'production';
 //const MONGO_URL = 'mongodb://localhost:27017/virtualcache';
 const MONGO_URL = require('./env.js').MONGO_URL;
@@ -42,37 +42,23 @@ if(isDeveloping){
 	});
 }
 //DB setup
-const db = mongoose.connection;
-// const locationSchema = mongoose.Schema({
-// 	type:'Point',
-// 	coordinates:[Number]
-// });
-// const deviceSchema = mongoose.Schema({
-// 	name: String,
-// 	cache:[{name:String, size:Number}],
-// 	d2d:0,
-// 	time:Number,
-// 	loc: {
-// 		type: [Number],	// [<longitude>, <latitude>]
-// 		index: '2d'			// create the geospatial index
-// 	}
-// });
-const deviceSchema = Schemas.deviceSchema;
-mongoose.set('debug', true);
-deviceSchema.on('index', function(err) { console.log('error building indexes: ' + err); });
-deviceSchema.plugin(version);
-deviceSchema.set('collection', 'devices');
-deviceSchema.index({ loc : '2dsphere' });
-
-const Device = mongoose.model('Device', deviceSchema);
+// const db = mongoose.connection;
+// const deviceSchema = Schemas.deviceSchema;
+// mongoose.set('debug', true);
+// deviceSchema.on('index', function(err) { console.log('error building indexes: ' + err); });
+// deviceSchema.plugin(version);
+// deviceSchema.set('collection', 'devices');
+// deviceSchema.index({ loc : '2dsphere' });
+//
+// const Device = mongoose.model('Device', deviceSchema);
 
 //DB start
-mongoose.connect(MONGO_URL);
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', () => {
-	// we're connected!
-	console.log('MongoDB connected');
-});
+// mongoose.connect(MONGO_URL);
+// db.on('error', console.error.bind(console, 'connection error:'));
+// db.once('open', () => {
+// 	// we're connected!
+// 	console.log('MongoDB connected');
+// });
 
 
 var virtual_cache;
@@ -89,36 +75,45 @@ MongoClient.connect(MONGO_URL, (err, database) => {
 
 app.get('/db', function (req, res) {
 	console.log('/db requested');
-	const currentDB_P = Device.find().exec()
-
-	const history_P = virtual_cache
-	.collection('versions')
-	.find()
-	.toArray()
-
-	Promise.all([currentDB_P, history_P])
-	.then(arr => res.status(201).send(arr));
+	// const currentDB_P = Device.find().exec()
+	//
+	// const history_P = virtual_cache
+	// .collection('versions')
+	// .find()
+	// .toArray()
+	//
+	// Promise.all([currentDB_P, history_P])
+	// .then(arr => res.status(201).send(arr));
+	virtual_cache.collection('devices').find().toArray()
+		.then(array => res.status(201).send(array))
+		.catch(err => res.status(500).send(err));
 });
 
 //Json version of logs
 app.post('/logs', (req, res) => {
-	virtual_cache.collection('devices').ensureIndex({loc:'2dsphere'});
-	const query = {'name':req.body.name};
-	Device.findOne(query,(err,result) => {
-		if(result == null) {
-			req.body.loc = {type:'Point', coordinates:req.body.loc};
-			console.log(req.body);
-			const device = new Device(req.body);
-			device.save()
-			.then(doc => res.status(201).end())
-			.catch(err => console.error(err));
-		} else {
-			Object.assign(result, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
-			result.save()
-			.then(doc => res.status(201).end())
-			.catch(err => console.error(err));
-		}
-	});
+	let devices = virtual_cache.collection('devices');
+	const device = Object.assign({}, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
+	devices.findOneAndUpdate({name:req.body.name}, device, {upsert:true});
+	devices.createIndex({loc:'2dsphere'});
+	devices.createIndex({cache:1});
+	res.status(201).end();
+	//virtual_cache.collection('devices').ensureIndex({loc:'2dsphere'});
+	// const query = {'name':req.body.name};
+	// Device.findOne(query,(err,result) => {
+	// 	if(result == null) {
+	// 		req.body.loc = {type:'Point', coordinates:req.body.loc};
+	// 		console.log(req.body);
+	// 		const device = new Device(req.body);
+	// 		device.save()
+	// 		.then(doc => res.status(201).end())
+	// 		.catch(err => console.error(err));
+	// 	} else {
+	// 		Object.assign(result, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
+	// 		result.save()
+	// 		.then(doc => res.status(201).end())
+	// 		.catch(err => console.error(err));
+	// 	}
+	// });
 });
 
 //GeoNear features
@@ -126,36 +121,30 @@ app.post('/locsearch', (req,res) => {
 	// [long, lat]
 	console.log('locsearch', req.body);
 	const center =	req.body.center || [0,0];
-	const maxDistance = req.body.radius/ 6378.137 || 8/ 6378.137;
-	//const maxDistance = req.body.radius;
-	const spherical = true;
-	console.log(center, maxDistance, spherical);
-	// find a location
-	// Device.find({
-	// 	loc: {
-	// 		$near: center,
-	// 		$maxDistance: radiusRad,
-	// 	}
-	// }).limit(10).exec(function(err, locations) {
-	// 	if (err) {
-	// 		return res.status(500).send(err);
-	// 	}
-	// 	res.status(201).send(locations);
-	// });
-	Device.find()
-	.where('loc')
-	.near({center, maxDistance, spherical})
-	.exec( (err, results) => {
-		if(err) return res.status(500).send(err);
-		res.status(201).send(results);
-	});
+	//meters
+	const maxDistance = req.body.radius;
+	console.log(center, maxDistance);
+	let device = virtual_cache.collection('devices');
+	const query = {
+		loc:{
+			$near:{
+				type:'Point',
+				coordinates:req.body.center
+			},
+			$maxDistance:maxDistance
+		}
+	};
+	device.find(query).toArray()
+		.then(results => res.status(201).send(results))
+		.catch(err => {
+			res.status(500).end();
+			console.error(err);
+		});
 });
 
 //erase DB contents
 app.get('/erase', (req,res) => {
-	db.collection('versions').drop();
 	db.collection('devices').drop();
-	deviceSchema.index({ loc : '2dsphere' });
 	res.status(200).redirect('/');
 });
 
@@ -206,15 +195,15 @@ app.get('/stream', (req, res) => {
 });
 
 //csv
-app.get('/csv', (req, res) => {
-	const currentDB_P = Device.find().exec()
-	currentDB_P
-	.then( arr => exportToCSV(arr, 'file.csv'))
-	.then( stream => {
-		res.writeHead(200, {
-			"Content-Disposition": "attachment;filename=" + 'file.csv',
-			'Content-Type':'text/csv'
-		});
-		stream.pipe(res);
-	});
-});
+// app.get('/csv', (req, res) => {
+// 	const currentDB_P = Device.find().exec()
+// 	currentDB_P
+// 	.then( arr => exportToCSV(arr, 'file.csv'))
+// 	.then( stream => {
+// 		res.writeHead(200, {
+// 			"Content-Disposition": "attachment;filename=" + 'file.csv',
+// 			'Content-Type':'text/csv'
+// 		});
+// 		stream.pipe(res);
+// 	});
+// });
