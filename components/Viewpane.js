@@ -6,7 +6,6 @@ const Viewpane = ({selectedDevice}) => {
 		//console.log('video',video._id);
 		return <VideoTable key={video._id} style={TableDataStyle} video={video}  />
 	});
-
 	return (
 		<div style = {ViewpaneStyle}>
 			<table style={Object.assign({},TableStyle,{width:'40%'})}>
@@ -18,7 +17,7 @@ const Viewpane = ({selectedDevice}) => {
 					</tr>
 					<tr>
 						<td style={TableDataStyle}>{selectedDevice.name}</td>
-						<td style={TableDataStyle}>{selectedDevice.loc.join(' ')}</td>
+						<td style={TableDataStyle}>{selectedDevice.loc.coordinates}</td>
 						<td style={TableDataStyle}>{selectedDevice.time}</td>
 					</tr>
 				</tbody>
@@ -32,6 +31,7 @@ const Viewpane = ({selectedDevice}) => {
 						<th style={TableDataStyle}>Data</th>
 						<th style={TableDataStyle}>Wifi</th>
 						<th style={TableDataStyle}>Battery</th>
+						<th style={TableDataSTyle}>Location</th>
 					</tr>
 					{cacheArray}
 				</tbody>

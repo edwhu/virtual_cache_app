@@ -9,6 +9,7 @@ const VideoTable = ({style, video}) => {
 		<td style={style}>{video.dataQuality}</td>
 		<td style={style}>{video.wifiQuality}</td>
 		<td style={style}>{video.battery}</td>
+		<td style={style}>{video.location}</td>
 	</tr>
 	);
 }
