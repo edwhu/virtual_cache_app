@@ -29,7 +29,7 @@ export const fetchDevices = () => {
 		return fetch(API_URL + '/db', {method:'GET'})
 		.then(res => res.json())
 		.then(json => {
-			dispatch(receiveDevices(json[0]));
+			dispatch(receiveDevices(json));
 		});
 	};
 };
@@ -47,7 +47,7 @@ export const receiveNearbyDevices = nearbyDevices => {
 	};
 };
 
-export const fetchNearbyDevices = (center, radius = 100) => {
+export const fetchNearbyDevices = (center, radius = 1000) => {
 	return function(dispatch) {
 		dispatch(requestNearbyDevices());
 		return fetch(API_URL + '/locsearch',

@@ -1,10 +1,11 @@
 import React, { PropTypes } from 'react';
-import VideoTable from './VideoTable'
-import {ViewpaneStyle, TableStyle, TableDataStyle} from '../styles/ViewpaneStyle.js'
+import VideoTable from './VideoTable';
+import uniqueId from 'lodash.uniqueid';
+import {ViewpaneStyle, TableStyle, TableDataStyle} from '../styles/ViewpaneStyle.js';
 const Viewpane = ({selectedDevice}) => {
 	let cacheArray = selectedDevice.cache.map(video => {
 		//console.log('video',video._id);
-		return <VideoTable key={video._id} style={TableDataStyle} video={video}  />
+		return <VideoTable key={uniqueId()} style={TableDataStyle} video={video}  />
 	});
 	return (
 		<div style = {ViewpaneStyle}>

@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { uniqueId } from 'lodash';
+import uniqueId from 'lodash.uniqueid';
 import {NearbyDeviceListStyle} from '../styles/NearbyDeviceListStyle.js'
 import Device from './Device.js';
 
