@@ -57,11 +57,15 @@ const db = mongoose.connection;
 // 		index: '2d'			// create the geospatial index
 // 	}
 // });
-const locationSchema = Schemas.locationSchema;
 const deviceSchema = Schemas.deviceSchema;
+mongoose.set('debug', true);
+deviceSchema.on('index', function(err) { console.log('error building indexes: ' + err); });
 deviceSchema.plugin(version);
-deviceSchema.set('collection', 'devices')
+deviceSchema.set('collection', 'devices');
+deviceSchema.index({ loc : '2dsphere' });
+
 const Device = mongoose.model('Device', deviceSchema);
+
 //DB start
 mongoose.connect(MONGO_URL);
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -69,6 +73,7 @@ db.once('open', () => {
 	// we're connected!
 	console.log('MongoDB connected');
 });
+
 
 var virtual_cache;
 MongoClient.connect(MONGO_URL, (err, database) => {
@@ -97,16 +102,18 @@ app.get('/db', function (req, res) {
 
 //Json version of logs
 app.post('/logs', (req, res) => {
+	virtual_cache.collection('devices').ensureIndex({loc:'2dsphere'});
 	const query = {'name':req.body.name};
 	Device.findOne(query,(err,result) => {
-		console.log(req.body);
 		if(result == null) {
+			req.body.loc = {type:'Point', coordinates:req.body.loc};
+			console.log(req.body);
 			const device = new Device(req.body);
 			device.save()
 			.then(doc => res.status(201).end())
 			.catch(err => console.error(err));
 		} else {
-			Object.assign(result, req.body);
+			Object.assign(result, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
 			result.save()
 			.then(doc => res.status(201).end())
 			.catch(err => console.error(err));
@@ -119,19 +126,28 @@ app.post('/locsearch', (req,res) => {
 	// [long, lat]
 	console.log('locsearch', req.body);
 	const center =	req.body.center || [0,0];
-	const radiusRad = req.body.radius/6731 || 8/6731;
-	console.log(center, radiusRad);
+	const maxDistance = req.body.radius/ 6378.137 || 8/ 6378.137;
+	//const maxDistance = req.body.radius;
+	const spherical = true;
+	console.log(center, maxDistance, spherical);
 	// find a location
-	Device.find({
-		loc: {
-			$near: center,
-			$maxDistance: radiusRad
-		}
-	}).limit(10).exec(function(err, locations) {
-		if (err) {
-			return res.status(500).send(err);
-		}
-		res.status(201).send(locations);
+	// Device.find({
+	// 	loc: {
+	// 		$near: center,
+	// 		$maxDistance: radiusRad,
+	// 	}
+	// }).limit(10).exec(function(err, locations) {
+	// 	if (err) {
+	// 		return res.status(500).send(err);
+	// 	}
+	// 	res.status(201).send(locations);
+	// });
+	Device.find()
+	.where('loc')
+	.near({center, maxDistance, spherical})
+	.exec( (err, results) => {
+		if(err) return res.status(500).send(err);
+		res.status(201).send(results);
 	});
 });
 
@@ -139,6 +155,7 @@ app.post('/locsearch', (req,res) => {
 app.get('/erase', (req,res) => {
 	db.collection('versions').drop();
 	db.collection('devices').drop();
+	deviceSchema.index({ loc : '2dsphere' });
 	res.status(200).redirect('/');
 });
 
@@ -195,7 +212,7 @@ app.get('/csv', (req, res) => {
 	.then( arr => exportToCSV(arr, 'file.csv'))
 	.then( stream => {
 		res.writeHead(200, {
-			 "Content-Disposition": "attachment;filename=" + 'file.csv',
+			"Content-Disposition": "attachment;filename=" + 'file.csv',
 			'Content-Type':'text/csv'
 		});
 		stream.pipe(res);
