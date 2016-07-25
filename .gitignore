@@ -3,3 +3,6 @@ env.js
 node_modules
 dist/
 pm2.json
+testDB.js
+exportCSV.js
+statescript.js
