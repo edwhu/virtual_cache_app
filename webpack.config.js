@@ -5,9 +5,9 @@ const production = {
   devtool: 'source-map',
   entry:'./index',
   output:{
-    path:path.join(__dirname, '/dist/'),
+    path:path.join(__dirname, '/public/'),
     filename:'bundle.js',
-    publicPath:'/dist/'
+    publicPath:'/public/'
   },
   plugins:[
     new webpack.optimize.OccurrenceOrderPlugin(),
