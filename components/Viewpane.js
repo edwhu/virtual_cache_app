@@ -18,7 +18,7 @@ const Viewpane = ({selectedDevice}) => {
 					</tr>
 					<tr>
 						<td style={TableDataStyle}>{selectedDevice.name}</td>
-						<td style={TableDataStyle}>{selectedDevice.loc.coordinates}</td>
+						<td style={TableDataStyle}>{selectedDevice.loc.coordinates.join(',')}</td>
 						<td style={TableDataStyle}>{selectedDevice.time}</td>
 					</tr>
 				</tbody>
