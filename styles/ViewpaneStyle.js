@@ -18,7 +18,7 @@ const TableDataStyle = {
 	borderBottom:'1px solid #ddd',
 	textAlign:'left',
 	overflow:'hidden',
-	width:90
+	width:80
 };
 
 export {ViewpaneStyle, TableStyle, TableDataStyle};
