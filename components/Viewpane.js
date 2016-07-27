@@ -9,7 +9,7 @@ const Viewpane = ({selectedDevice}) => {
 	});
 	return (
 		<div style = {ViewpaneStyle}>
-			<table style={Object.assign({},TableStyle,{width:'40%'})}>
+			<table style={Object.assign({},TableStyle,{width:'50%'})}>
 				<tbody>
 					<tr>
 						<th style={TableDataStyle}>Name</th>
@@ -32,7 +32,7 @@ const Viewpane = ({selectedDevice}) => {
 						<th style={TableDataStyle}>Data</th>
 						<th style={TableDataStyle}>Wifi</th>
 						<th style={TableDataStyle}>Battery</th>
-						<th style={TableDataSTyle}>Location</th>
+						{/*<th style={TableDataStyle}>Location</th>*/}
 					</tr>
 					{cacheArray}
 				</tbody>
