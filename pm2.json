@@ -1,6 +1,6 @@
 {
   "apps" : [{
-    "script"      : "vcserver.js",
+    "script"      : "server/vcserver.js",
     "watch"       : false,
     "instances": "max",
     "exec_mode": "fork",
