@@ -22,9 +22,6 @@
     "isomorphic-fetch": "^2.2.1",
     "lodash.uniqueid": "^4.0.1",
     "mongodb": "^2.1.18",
-    "passport": "^0.3.2",
-    "passport-google-token": "^0.1.2",
-    "passport-youtube-v3": "^2.0.0",
     "react": "^15.1.0",
     "react-addons-shallow-compare": "^15.1.0",
     "react-dom": "^15.1.0",
@@ -32,6 +29,7 @@
     "redux": "^3.1.2",
     "redux-logger": "^2.6.1",
     "redux-thunk": "^2.1.0",
+    "sha1": "^1.1.1",
     "youtube-dl": "^1.11.1"
   },
   "devDependencies": {

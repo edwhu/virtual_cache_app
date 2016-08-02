@@ -6,9 +6,8 @@ const fs = require('fs');
 const app = express();
 const youtubedl = require('youtube-dl');
 const MongoClient = require('mongodb').MongoClient;
-const passport = require('passport');
-const YoutubeV3Strategy = require('passport-youtube-v3').Strategy;
 const Promise = require('bluebird');
+const sha1 = require('sha1');
 const isDeveloping = process.env.NODE_ENV !== 'production';
 //const MONGO_URL = 'mongodb://localhost:27017/virtualcache';
 const ENV = require('../env.js');
@@ -19,9 +18,7 @@ const FILESIZE = fs.statSync(VIDEO).size;
 //middleware
 app.use(express.static(path.join(__dirname, '/../public')));
 //app.set('view engine', 'pug');
-app.use(bodyParser.urlencoded({
-	extended: true
-}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 if(isDeveloping){
 	console.log('Development mode');
@@ -40,21 +37,6 @@ if(isDeveloping){
 	});
 }
 
-const clientID = ENV.YOUTUBE_APP_ID;
-const clientSecret = ENV.YOUTUBE_APP_SECRET;
-const callbackURL = ENV.CALLBACKURL;
-passport.use('youtube',new YoutubeV3Strategy({
-	clientID,
-	clientSecret,
-	callbackURL,
-	scope: ['https://www.googleapis.com/auth/youtube.readonly']
-},
-function(accessToken, refreshToken, profile, done) {
-	console.log('got authentication for', profile);
-	return done(err, user);
-}
-));
-app.use(passport.initialize());
 
 //Server Startup
 let virtual_cache;
@@ -70,24 +52,30 @@ MongoClient.connect(MONGO_URL, (err, database) => {
 //ROUTES
 app.get('/db', function (req, res) {
 	console.log('/db requested');
-	virtual_cache.collection('devices').find().toArray()
+	virtual_cache.collection('accounts').find().toArray()
 	.then(array => res.status(201).send(array))
 	.catch(err => res.status(500).send(err));
 });
 
 //Json version of logs
+const createToken = string => {
+	return sha1(string + ENV.SALT);
+};
 app.post('/logs', (req, res) => {
-	const devices = virtual_cache.collection('devices');
-	const device = Object.assign({}, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
-	devices.findOneAndUpdate({name:req.body.name}, device, {upsert:true});
-	devices.createIndex({loc:'2dsphere'});
-	devices.createIndex({cache:1});
+	const accounts = virtual_cache.collection('accounts');
+	const account = Object.assign({}, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
+	accounts.findOne({name:account.account}).then(res => {
+		const token = createToken(res.account);
+		if(!res){ //if no match
+			accounts.insert(Object.assign({},account,{token,ticket:0}));
+		}
+		else if(token === account.token) {
+			++res.ticket;
+		}
+	});
+	accounts.createIndex({loc:'2dsphere'});
+	accounts.createIndex({cache:1});
 	res.status(201).end();
-});
-
-//youtube authentication logs
-app.post('/auth', passport.authenticate('youtube'), (req, res) => {
-	console.log('authenticated');
 });
 
 //GeoNear features
@@ -98,7 +86,7 @@ app.post('/locsearch', (req,res) => {
 	//meters
 	const maxDistance = req.body.radius;
 	console.log(center, maxDistance);
-	const device = virtual_cache.collection('devices');
+	const device = virtual_cache.collection('accounts');
 	const query = {
 		loc:{
 			$near:{
@@ -120,7 +108,7 @@ app.post('/locsearch', (req,res) => {
 
 //erase DB contents
 app.get('/erase', (req,res) => {
-	db.collection('devices').drop();
+	db.collection('accounts').drop();
 	res.status(200).redirect('/');
 });
 
