@@ -62,15 +62,22 @@ const createToken = string => {
 	return sha1(string + ENV.SALT);
 };
 app.post('/logs', (req, res) => {
+	console.log('/logs', req.body);
 	const accounts = virtual_cache.collection('accounts');
-	const account = Object.assign({}, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
-	accounts.findOne({name:account.account}).then(res => {
-		const token = createToken(res.account);
-		if(!res){ //if no match
-			accounts.insert(Object.assign({},account,{token,ticket:0}));
+	const request = Object.assign({}, req.body, {loc:{type:'Point', coordinates:req.body.loc}});
+	accounts.findOne({account:request.account}, {}).then(result => {
+		if(result == null){ //if no match
+			const token = createToken(request.account);
+			accounts.insertOne({account:request.account, token, ticket:1}, function(err, r){
+			if(err) return console.error(err);
+			});
+			console.log('inserted new object');
 		}
-		else if(token === account.token) {
-			++res.ticket;
+		else if(result.token === request.token) {
+			console.log('updated ticket');
+			accounts.update({_id : result._id}, {$inc:{ticket:1}});
+		} else {
+			console.log('valid credentials, invalid token');
 		}
 	});
 	accounts.createIndex({loc:'2dsphere'});
@@ -108,7 +115,7 @@ app.post('/locsearch', (req,res) => {
 
 //erase DB contents
 app.get('/erase', (req,res) => {
-	db.collection('accounts').drop();
+	virtual_cache.collection('accounts').drop();
 	res.status(200).redirect('/');
 });
 
