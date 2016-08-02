@@ -20,7 +20,7 @@ const mapDispatchToProps = dispatch => {
 	return {
 		onDeviceClick: (name, location) => {
 			dispatch(setSelected(name));
-			dispatch(fetchNearbyDevices(location))
+			dispatch(fetchNearbyDevices(location));
 		}
 	};
 };

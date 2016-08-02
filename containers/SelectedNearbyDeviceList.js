@@ -8,21 +8,21 @@ const setNearbyDevices = (nearbyDevices, selected) => {
       return Object.assign({}, device, {selected:true});
     return Object.assign({}, device, {selected:false});
   });
-}
+};
 
 const mapStateToProps = state => {
   return {
     nearbyDevices:setNearbyDevices(state.nearbyDevices, state.selectedDevice)
-  }
-}
+  };
+};
 
 const mapDispatchToProps = dispatch => {
   return {
     onDeviceClick: name => {
       dispatch(setSelected(name));
     }
-  }
-}
+  };
+};
 
 const SelectedNearbyDeviceList = connect(
   mapStateToProps,

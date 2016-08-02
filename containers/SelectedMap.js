@@ -5,9 +5,9 @@ import GMap from '../components/GMap.js';
 const convertDevicesToMarkers = devices => {
 	return devices.map(d => {
 		//console.log('converting', {name:d.name, _id:d._id, loc:d.loc});
-		return {name:d.name, _id:d._id, loc:d.loc.coordinates}
+		return {name:d.name, _id:d._id, loc:d.loc.coordinates};
 	});
-}
+};
 
 const mapStateToProps = state => {
 	return {

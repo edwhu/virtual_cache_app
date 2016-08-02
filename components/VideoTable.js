@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes } from 'react';
 
 const VideoTable = ({style, video}) => {
 	return (
@@ -12,6 +12,6 @@ const VideoTable = ({style, video}) => {
 		{/*<td style={style}>{video.location}</td>*/}
 	</tr>
 	);
-}
+};
 
 export default VideoTable;

@@ -3,7 +3,7 @@ import shallowCompare from 'react-addons-shallow-compare';
 
 import GoogleMap from 'google-map-react';
 import MapMarker from './MapMarker.js';
-import {GMapStyle} from '../styles/GMapStyle.js'
+import {GMapStyle} from '../styles/GMapStyle.js';
 
  const API_KEY = 'AIzaSyCkxJlKBChQSWZnA2W-9AXH1swCLI_cIC0';
 // const API_KEY = require('../../env.js').API_KEY;

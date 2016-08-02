@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import Device from './Device.js';
-import {DeviceListStyle} from '../styles/DeviceListStyle.js'
+import {DeviceListStyle} from '../styles/DeviceListStyle.js';
 const DeviceList = ({ devices, onDeviceClick}) => {
 	return (
 		<div style={DeviceListStyle}>

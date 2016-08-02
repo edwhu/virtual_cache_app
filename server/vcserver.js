@@ -40,16 +40,17 @@ if(isDeveloping){
 	});
 }
 
-const YOUTUBE_APP_ID = ENV.YOUTUBE_APP_ID;
-const YOUTUBE_APP_SECRET = ENV.YOUTUBE_APP_SECRET;
-passport.use(new YoutubeV3Strategy({
-	clientID: YOUTUBE_APP_ID,
-	clientSecret: YOUTUBE_APP_SECRET,
-	callbackURL: "http://localhost:3000/auth",
+const clientID = ENV.YOUTUBE_APP_ID;
+const clientSecret = ENV.YOUTUBE_APP_SECRET;
+const callbackURL = ENV.CALLBACKURL;
+passport.use('youtube',new YoutubeV3Strategy({
+	clientID,
+	clientSecret,
+	callbackURL,
 	scope: ['https://www.googleapis.com/auth/youtube.readonly']
 },
 function(accessToken, refreshToken, profile, done) {
-	console.log('got authentication for', profile)
+	console.log('got authentication for', profile);
 	return done(err, user);
 }
 ));
@@ -85,7 +86,7 @@ app.post('/logs', (req, res) => {
 });
 
 //youtube authentication logs
-app.post('/auth', passport.authenticate('YoutubeV3Strategy'), (req, res) => {
+app.post('/auth', passport.authenticate('youtube'), (req, res) => {
 	console.log('authenticated');
 });
 

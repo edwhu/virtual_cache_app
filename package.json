@@ -6,7 +6,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=production node server/vcserver.js",
     "test": "cross-env NODE_ENV=test mocha --recursive --compilers js:babel-register --require ./test/setup.js",
-    "lint": "eslint actions components containers reducers styles",
+    "lint": "eslint --fix actions components store containers reducers styles",
     "startdev": "node server/vcserver.js",
     "build": "cross-env NODE_ENV=production ./node_modules/.bin/webpack --config webpack.config.js",
     "pm2": "pm2 start pm2.json -i max --env production",

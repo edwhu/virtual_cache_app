@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import {DeviceStyle} from '../styles/DeviceStyle'
+import {DeviceStyle} from '../styles/DeviceStyle';
 const Device = ({onClick, selected, name}) => (
 	<div style={{DeviceStyle}}>
 		<li

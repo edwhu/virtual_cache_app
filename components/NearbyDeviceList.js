@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import uniqueId from 'lodash.uniqueid';
-import {NearbyDeviceListStyle} from '../styles/NearbyDeviceListStyle.js'
+import {NearbyDeviceListStyle} from '../styles/NearbyDeviceListStyle.js';
 import Device from './Device.js';
 
 const NearbyDeviceList = ({nearbyDevices, onDeviceClick}) => {

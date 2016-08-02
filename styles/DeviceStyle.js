@@ -3,4 +3,4 @@ const DeviceStyle = {
 	border:'2 solid #73AD21'
 };
 
-export {DeviceStyle}
+export {DeviceStyle};
