@@ -3,7 +3,7 @@
     "script"      : "server/vcserver.js",
     "watch"       : false,
     "instances": "max",
-    "exec_mode": "fork",
+    "exec_mode": "cluster",
     "env": {
       "NODE_ENV": "development",
     },
