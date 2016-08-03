@@ -85,6 +85,19 @@ app.post('/logs', (req, res) => {
 	res.status(201).end();
 });
 
+//get ticket count
+app.post('ticket', (req, res) => {
+	const account = req.body.account;
+	const accounts = virtual_cache.collection('accounts');
+	accounts.findOne({account}, {}).then(result => {
+		if(result) {
+			res.status(201).send(result.ticket);
+		} else {
+			res.status(500).end();
+		}
+	});
+});
+
 //GeoNear features
 app.post('/locsearch', (req,res) => {
 	// [long, lat]
