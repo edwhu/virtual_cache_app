@@ -87,11 +87,14 @@ app.post('/logs', (req, res) => {
 
 //get ticket count
 app.post('/ticket', (req, res) => {
+	console.log('ticket', req.body);
 	const account = req.body.account;
 	const accounts = virtual_cache.collection('accounts');
-	accounts.findOne({account}, {}).then(result => {
+	accounts.findOne({account:account}).then(result => {
 		if(result) {
-			res.status(201).send(result.ticket);
+			console.log('found', result);
+			res.sendStatus(`${result.ticket}`);
+			res.end();
 		} else {
 			res.status(500).end();
 		}
