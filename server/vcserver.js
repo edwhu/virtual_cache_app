@@ -86,7 +86,7 @@ app.post('/logs', (req, res) => {
 });
 
 //get ticket count
-app.post('ticket', (req, res) => {
+app.post('/ticket', (req, res) => {
 	const account = req.body.account;
 	const accounts = virtual_cache.collection('accounts');
 	accounts.findOne({account}, {}).then(result => {
