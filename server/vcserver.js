@@ -93,7 +93,7 @@ app.post('/ticket', (req, res) => {
 	accounts.findOne({account:account}).then(result => {
 		if(result) {
 			console.log('found', result);
-			res.sendStatus(`${result.ticket}`);
+			res.send(`${result.ticket}`);
 			res.end();
 		} else {
 			res.status(500).end();
