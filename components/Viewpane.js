@@ -12,21 +12,21 @@ const Viewpane = ({selectedDevice}) => {
 	}
 	return (
 		<div style = {ViewpaneStyle}>
-			<table style={Object.assign({},TableStyle,{width:'50%'})}>
+			<table style={Object.assign({},TableStyle,{width:'30%'})}>
 				<tbody>
 					<tr>
 						<th style={TableDataStyle}>Name</th>
-						<th style={TableDataStyle}>location</th>
-						<th style={TableDataStyle}>date</th>
+						<th style={TableDataStyle}>Date</th>
+						<th style={TableDataStyle}>Location</th>
 					</tr>
 					<tr>
 						<td style={TableDataStyle}>{selectedDevice.name}</td>
-						<td style={TableDataStyle}>{selectedDevice.loc.coordinates.join()}</td>
 						<td style={TableDataStyle}>{selectedDevice.time}</td>
+						<td style={TableDataStyle}>{selectedDevice.loc.coordinates.join()}</td>
 					</tr>
 				</tbody>
 			</table>
-			<table style={TableStyle}>
+			<table style={Object.assign({},TableStyle,{width:'70%'})}>
 				<tbody>
 					<tr>
 						<th style={TableDataStyle}>Video</th>
@@ -35,7 +35,7 @@ const Viewpane = ({selectedDevice}) => {
 						<th style={TableDataStyle}>Data</th>
 						<th style={TableDataStyle}>Wifi</th>
 						<th style={TableDataStyle}>Battery</th>
-						{/*<th style={TableDataStyle}>Location</th>*/}
+						{<th style={TableDataStyle}>Location</th>}
 					</tr>
 					{cacheArray}
 				</tbody>
