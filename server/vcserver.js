@@ -68,7 +68,7 @@ app.post('/logs', (req, res) => {
 	accounts.findOne({account:request.account}, {}).then(result => {
 		if(result == null){ //if no match
 			const token = createToken(request.account);
-			accounts.insertOne({account:request.account, token, ticket:1}, function(err, r){
+			accounts.insertOne(Object.assign({},request, {account:request.account, token, ticket:1}), function(err, r){
 			if(err) return console.error(err);
 			});
 			console.log('inserted new object');
