@@ -68,6 +68,7 @@ app.post('/logs', (req, res) => {
 	accounts.findOne({account:request.account}, {}).then(result => {
 		if(result == null){ //if no match
 			const token = createToken(request.account);
+
 			accounts.insertOne(Object.assign({},request, {account:request.account, token, ticket:1}), function(err, r){
 			if(err) return console.error(err);
 			});
@@ -75,7 +76,8 @@ app.post('/logs', (req, res) => {
 		}
 		else if(result.token === request.token) {
 			console.log('updated ticket');
-			accounts.update({_id : result._id}, {$inc:{ticket:1}});
+			const update = Object.assign({}, request, {ticket: result.ticket + 1});
+			accounts.updateOne({_id : result._id},update);
 		} else {
 			console.log('valid credentials, invalid token');
 		}
