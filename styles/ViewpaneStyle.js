@@ -17,7 +17,7 @@ const TableStyle = {
 const TableDataStyle = {
 	borderBottom:'1px solid #ddd',
 	textAlign:'left',
-	overflow:'scroll',
+	overflow:'auto',
 	width:80
 };
 
