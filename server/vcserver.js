@@ -183,7 +183,7 @@ app.get('/stream', (req, res) => {
 	video.pipe(res);
 });
 
-app.post('/cookbook', (req, res) => {
+app.get('/cookbook', (req, res) => {
   const json = {"Chinese":["Fried Rice", "Duck Noodle Soup"],
   "European":["Beef a la tarte", "Fish and Chips"],
   "Mexican":["Enchilada", "Fish Taco"]};
