@@ -183,6 +183,12 @@ app.get('/stream', (req, res) => {
 	video.pipe(res);
 });
 
+app.post('/cookbook', (req, res) => {
+  const json = {"Chinese":["Fried Rice", "Duck Noodle Soup"],
+  "European":["Beef a la tarte", "Fish and Chips"],
+  "Mexican":["Enchilada", "Fish Taco"]};
+  res.send(json);
+});
 //csv
 // app.get('/csv', (req, res) => {
 // 	const currentDB_P = Device.find().exec()
