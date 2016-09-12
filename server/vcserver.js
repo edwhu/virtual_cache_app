@@ -185,8 +185,8 @@ app.get('/stream', (req, res) => {
 
 app.get('/cookbook', (req, res) => {
   const json = {
-Chinese:[{name:"Fried Rice", details:"Rice that is fried."}, {name:"Wonton", details:"Meat wrapped with rice skin"}]
-Indian:[{name:"Samosa", details:"Fried dish with savory filling"}]
+Chinese:[{name:"Fried Rice", details:"Rice that is fried."}, {name:"Wonton", details:"Meat wrapped with rice skin"}],
+Indian:[{name:"Samosa", details:"Fried dish with savory filling"}],
 American:[{name:"Burger", details:"Sandwich but tastier"}]
 };
   res.send(json);
